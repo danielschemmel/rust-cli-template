@@ -1,0 +1,19 @@
+[package]
+# Metadata that is also used to generate the --help command:
+name = "application"
+version = "0.0.1"
+authors = ["Daniel Schemmel"]
+description = "A sample application"
+
+# Other metadata
+edition = "2018"
+publish = false
+
+[features]
+default = []
+bug = []
+subcommands = []
+
+[dependencies]
+error-chain = "0.12"
+structopt = { version = "0.3", git = "https://github.com/danielschemmel/structopt", branch = "errorchain" }
