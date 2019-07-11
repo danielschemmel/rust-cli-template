@@ -16,4 +16,4 @@ subcommands = []
 
 [dependencies]
 error-chain = "0.12"
-structopt = { version = "0.3", git = "https://github.com/danielschemmel/structopt", branch = "errorchain" }
+structopt = { version = "0.3", git = "https://github.com/TeXitoi/structopt", branch = "master" }
