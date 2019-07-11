@@ -5,7 +5,7 @@ use crate::errors::*;
 #[structopt(setting = structopt::clap::AppSettings::ColoredHelp, author = "")]
 pub struct Args {
 	/// Something, something, path
-	#[structopt(name = "FILE", parse(from_os_str))]
+	#[structopt(name = "FILE")]
 	file: std::path::PathBuf,
 	/// Optional blubber command
 	#[structopt(name = "BLUBBER")]
@@ -25,7 +25,7 @@ pub enum Args {
 	#[structopt(name = "file-based")]
 	FileBased {
 		/// Something, something, path
-		#[structopt(name = "FILE", parse(from_os_str))]
+		#[structopt(name = "FILE")]
 		file: std::path::PathBuf,
 		/// Optional blubber command
 		#[structopt(name = "BLUBBER")]
