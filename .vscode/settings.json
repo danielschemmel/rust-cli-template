@@ -1,6 +1,7 @@
 {
 	"cSpell.words": [
 		"backtrace",
+		"flexi",
 		"recurse",
 		"structopt",
 		"subcommand",

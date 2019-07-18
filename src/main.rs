@@ -4,6 +4,10 @@
 #[macro_use]
 extern crate error_chain;
 
+#[allow(unused_imports)] // the macro is used - but clippy fails to notice
+#[macro_use]
+extern crate log;
+
 mod cli;
 use cli::{Args, ReturnCode};
 
@@ -32,6 +36,10 @@ fn parse_arguments() -> Result<ReturnCode> {
 }
 
 fn main() {
+	flexi_logger::Logger::with_env_or_str("warn, application=debug")
+            .format(flexi_logger::colored_with_thread)
+            .start()
+            .unwrap();
 	match parse_arguments() {
 		Ok(return_code) => {
 			std::process::exit(return_code as i32);

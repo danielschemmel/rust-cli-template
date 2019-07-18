@@ -59,5 +59,6 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 pub fn main(args: Args) -> Result<ReturnCode> {
 	println!("{:?}", args);
 
+	error!("A bug is about to occur!");
 	Err(ErrorKind::SomeBug("bug feature enabled".to_string()).into())
 }

@@ -16,4 +16,6 @@ subcommands = []
 
 [dependencies]
 error-chain = "0.12"
+log = "0.4"
+flexi_logger = { version = "0.13", features = ["ziplogs"] }
 structopt = { version = "0.3", git = "https://github.com/TeXitoi/structopt", branch = "master" }
