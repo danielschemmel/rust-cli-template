@@ -50,6 +50,11 @@ pub enum ReturnCode {
 
 #[cfg(not(feature = "bug"))]
 pub fn main(args: Args) -> Result<ReturnCode> {
+	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
+		.format(flexi_logger::colored_with_thread)
+		.start()
+		.chain_err(|| ErrorKind::LoggingSetup)?;
+
 	println!("{:?}", args);
 
 	Ok(ReturnCode::Success)
@@ -57,6 +62,11 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 
 #[cfg(feature = "bug")]
 pub fn main(args: Args) -> Result<ReturnCode> {
+	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
+		.format(flexi_logger::colored_with_thread)
+		.start()
+		.chain_err(|| ErrorKind::LoggingSetup)?;
+
 	println!("{:?}", args);
 
 	error!("A bug is about to occur!");
