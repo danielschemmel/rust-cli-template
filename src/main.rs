@@ -2,7 +2,7 @@
 #![recursion_limit = "1024"]
 
 #[macro_use]
-extern crate error_chain;
+extern crate failure;
 
 #[allow(unused_imports)] // the macro is used - but clippy fails to notice
 #[macro_use]
@@ -11,10 +11,10 @@ extern crate log;
 mod cli;
 use cli::{Args, ReturnCode};
 
-mod errors;
-use errors::*;
+mod logging_error;
+pub use logging_error::LoggingError;
 
-fn parse_arguments() -> Result<ReturnCode> {
+fn parse_arguments() -> Result<ReturnCode, failure::Error> {
 	use structopt::StructOpt;
 	match Args::from_iter_safe(std::env::args_os()) {
 		Ok(args) => cli::main(args),
@@ -35,42 +35,43 @@ fn parse_arguments() -> Result<ReturnCode> {
 	}
 }
 
-fn report_error(e: Error) {
-	use std::io::Write;
-	let stderr = &mut ::std::io::stderr();
-	let stderr_error_message = "Error writing to stderr";
+fn backtraces_enabled() -> bool {
+	std::env::var("RUST_BACKTRACE")
+		.ok()
+		.and_then(|value| if value == "1" { Some(()) } else { None })
+		.is_some()
+}
 
-	writeln!(stderr).expect(stderr_error_message);
-	writeln!(stderr, "Oops!").expect(stderr_error_message);
-	writeln!(stderr, "An unexpected error occurred. Please provide the error message below and any way to cause this error to the maintainers of this program.").expect(stderr_error_message);
-	writeln!(stderr).expect(stderr_error_message);
+fn report_error(e: &failure::Fail) {
+	eprintln!();
+	eprintln!("Oops!");
+	eprintln!("An unexpected error occurred. Please provide the error message below and any way to cause this error to the maintainers of this program.");
 
-	writeln!(stderr, "error: {}", e).expect(stderr_error_message);
-
-	for e in e.iter().skip(1) {
-		writeln!(stderr, "caused by: {}", e).expect(stderr_error_message);
+	eprintln!();
+	eprintln!("error: {}", e);
+	for e in e.iter_causes() {
+		eprintln!("caused by: {}", e);
 	}
 
-	if let Some(backtrace) = e.backtrace() {
-		writeln!(stderr, "{:?}", backtrace).expect(stderr_error_message);
+	if backtraces_enabled() {
+		if let Some(backtrace) = e.backtrace() {
+			eprintln!();
+			eprintln!("{}", backtrace);
+		}
 	} else {
-		writeln!(
-			stderr,
-			"run with the environment variable RUST_BACKTRACE=1 to get a backtrace..."
-		)
-		.expect(stderr_error_message);
+		eprintln!();
+		eprintln!("Please set the environment variable RUST_BACKTRACE to 1 to enable backtraces.");
 	}
 
 	std::process::exit(ReturnCode::UnhandledFailure as i32);
 }
 
+use failure::ResultExt;
+
 fn main() {
-	match parse_arguments() {
-		Ok(return_code) => {
-			std::process::exit(return_code as i32);
-		}
-		Err(e) => {
-			report_error(e);
-		}
-	}
+	parse_arguments()
+		.map(|return_code| std::process::exit(return_code as i32))
+		.context("Uncaught error in main")
+		.map_err(|error| report_error(&error))
+		.ok();
 }

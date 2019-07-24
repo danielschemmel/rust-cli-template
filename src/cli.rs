@@ -1,4 +1,4 @@
-use crate::errors::*;
+use failure::{Error, ResultExt};
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
@@ -49,11 +49,11 @@ pub enum ReturnCode {
 }
 
 #[cfg(not(feature = "bug"))]
-pub fn main(args: Args) -> Result<ReturnCode> {
+pub fn main(args: Args) -> Result<ReturnCode, Error> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
-		.chain_err(|| ErrorKind::LoggingSetup)?;
+		.map_err(crate::LoggingError::CreationFailure)?;
 
 	println!("{:?}", args);
 
@@ -61,14 +61,17 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 }
 
 #[cfg(feature = "bug")]
-pub fn main(args: Args) -> Result<ReturnCode> {
+pub fn main(args: Args) -> Result<ReturnCode, Error> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
-		.chain_err(|| ErrorKind::LoggingSetup)?;
+		.map_err(crate::LoggingError::CreationFailure)?;
 
 	println!("{:?}", args);
 
 	error!("A bug is about to occur!");
-	Err(ErrorKind::SomeBug("bug feature enabled".to_string()).into())
+	let error = format_err!("The bug feature is enabled");
+	Err(error).context("Some context")?;
+
+	Ok(ReturnCode::Success)
 }
