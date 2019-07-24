@@ -1,4 +1,4 @@
-use failure::{Error, ResultExt};
+use failure::Error;
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
