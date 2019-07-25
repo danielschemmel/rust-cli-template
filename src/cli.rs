@@ -1,3 +1,5 @@
+use crate::errors::*;
+
 use failure::Error;
 
 #[cfg(not(feature = "subcommands"))]
@@ -53,7 +55,7 @@ pub fn main(args: Args) -> Result<ReturnCode, Error> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
-		.map_err(crate::LoggingError::CreationFailure)?;
+		.map_err(LoggingError::CreationFailure)?;
 
 	println!("{:?}", args);
 
@@ -65,11 +67,12 @@ pub fn main(args: Args) -> Result<ReturnCode, Error> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
-		.map_err(crate::LoggingError::CreationFailure)?;
+		.map_err(LoggingError::CreationFailure)?;
 
 	println!("{:?}", args);
 
 	error!("A bug is about to occur!");
+	use failure::ResultExt;
 	let error = format_err!("The bug feature is enabled");
 	Err(error).context("Some context")?;
 

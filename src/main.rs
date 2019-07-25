@@ -11,8 +11,8 @@ extern crate log;
 mod cli;
 use cli::{Args, ReturnCode};
 
-mod logging_error;
-pub use logging_error::LoggingError;
+mod errors;
+use errors::*;
 
 fn parse_arguments() -> Result<ReturnCode, failure::Error> {
 	use structopt::StructOpt;
@@ -35,33 +35,13 @@ fn parse_arguments() -> Result<ReturnCode, failure::Error> {
 	}
 }
 
-fn backtraces_enabled() -> bool {
-	std::env::var("RUST_BACKTRACE")
-		.ok()
-		.and_then(|value| if value == "1" { Some(()) } else { None })
-		.is_some()
-}
-
 fn report_error(e: &failure::Fail) {
 	eprintln!();
 	eprintln!("Oops!");
 	eprintln!("An unexpected error occurred. Please provide the error message below and any way to cause this error to the maintainers of this program.");
 
 	eprintln!();
-	eprintln!("error: {}", e);
-	for e in e.iter_causes() {
-		eprintln!("caused by: {}", e);
-	}
-
-	if backtraces_enabled() {
-		if let Some(backtrace) = e.backtrace() {
-			eprintln!();
-			eprintln!("{}", backtrace);
-		}
-	} else {
-		eprintln!();
-		eprintln!("Please set the environment variable RUST_BACKTRACE to 1 to enable backtraces.");
-	}
+	eprintln!("{}", e.display_chain());
 
 	std::process::exit(ReturnCode::UnhandledFailure as i32);
 }
