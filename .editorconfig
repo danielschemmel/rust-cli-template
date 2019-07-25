@@ -2,12 +2,11 @@ root = true
 
 [*]
 end_of_line = lf
+
+[.{gitignore,editorconfig}]
 insert_final_newline = true
 
-[*.rs]
+[*.{rs,toml,json,md}]
 indent_style = tab
 indent_size = 2
-
-[*.toml]
-indent_style = tab
-indent_size = 2
+insert_final_newline = true
