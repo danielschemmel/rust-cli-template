@@ -5,7 +5,7 @@ pub trait FailExt {
 	fn display_chain(&self) -> DisplayChain;
 }
 
-impl FailExt for failure::Fail {
+impl FailExt for dyn failure::Fail {
 	fn display_chain(&self) -> DisplayChain {
 		DisplayChain::new(self)
 	}
@@ -27,11 +27,11 @@ where
 }
 
 pub struct DisplayChain<'a> {
-	error: &'a failure::Fail,
+	error: &'a dyn failure::Fail,
 }
 
 impl<'a> DisplayChain<'a> {
-	fn new(error: &failure::Fail) -> DisplayChain {
+	fn new(error: &dyn failure::Fail) -> DisplayChain {
 		DisplayChain { error }
 	}
 }

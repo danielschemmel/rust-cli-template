@@ -35,7 +35,7 @@ fn parse_arguments() -> Result<ReturnCode, failure::Error> {
 	}
 }
 
-fn report_error(e: &failure::Fail) {
+fn report_error(e: &dyn failure::Fail) {
 	eprintln!();
 	eprintln!("Oops!");
 	eprintln!("An unexpected error occurred. Please provide the error message below and any way to cause this error to the maintainers of this program.");
