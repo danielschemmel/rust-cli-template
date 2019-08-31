@@ -4,7 +4,7 @@ use failure::Error;
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
-#[structopt(setting = structopt::clap::AppSettings::ColoredHelp, author = "")]
+#[structopt(setting = structopt::clap::AppSettings::ColoredHelp)]
 pub struct Args {
 	/// Something, something, path
 	#[structopt(name = "FILE")]
@@ -22,7 +22,7 @@ pub struct Args {
 
 #[cfg(feature = "subcommands")]
 #[derive(structopt::StructOpt, Debug)]
-#[structopt(setting = structopt::clap::AppSettings::ColoredHelp, author = "")]
+#[structopt(setting = structopt::clap::AppSettings::ColoredHelp)]
 pub enum Args {
 	#[structopt(name = "file-based")]
 	FileBased {
