@@ -1,5 +1,10 @@
-#[derive(Fail, Debug)]
+use thiserror::Error;
+
+#[derive(Error, Debug)]
 pub enum LoggingError {
-	#[fail(display = "Failed to create logger")]
-	CreationFailure(#[fail(cause)] flexi_logger::FlexiLoggerError),
+	#[error("Failed to create logger")]
+	CreationFailure(
+		#[from] flexi_logger::FlexiLoggerError,
+		// backtrace: std::backtrace::Backtrace,
+	),
 }

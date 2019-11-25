@@ -1,6 +1,5 @@
 use crate::errors::*;
-
-use failure::Error;
+use anyhow::Result;
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
@@ -47,11 +46,10 @@ pub enum Args {
 pub enum ReturnCode {
 	Success = 0,
 	ArgumentParsing = 1,
-	UnhandledFailure = -1,
 }
 
 #[cfg(not(feature = "bug"))]
-pub fn main(args: Args) -> Result<ReturnCode, Error> {
+pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
@@ -63,7 +61,7 @@ pub fn main(args: Args) -> Result<ReturnCode, Error> {
 }
 
 #[cfg(feature = "bug")]
-pub fn main(args: Args) -> Result<ReturnCode, Error> {
+pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
@@ -72,9 +70,10 @@ pub fn main(args: Args) -> Result<ReturnCode, Error> {
 	println!("{:?}", args);
 
 	error!("A bug is about to occur!");
-	use failure::ResultExt;
-	let error = format_err!("The bug feature is enabled");
-	Err(error).context("Some context")?;
+	let error = anyhow!("The bug feature is enabled");
+
+	use anyhow::Context;
+	Err(error).context("Some context for where the error caused problems")?;
 
 	Ok(ReturnCode::Success)
 }

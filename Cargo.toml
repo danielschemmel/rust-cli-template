@@ -15,7 +15,8 @@ bug = []
 subcommands = []
 
 [dependencies]
-failure = "0.1"
+anyhow = "1"
 flexi_logger = { version = "0.14", features = ["ziplogs"] }
 log = "0.4"
 structopt = "0.3"
+thiserror = "1"
