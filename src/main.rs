@@ -3,20 +3,23 @@
 // By default, forbid unsafe code - your project may need to change this setting
 #![forbid(unsafe_code)]
 
+#[allow(unused_imports)] // the macros are used by the example only when the "bug" feature is on
 #[macro_use]
-extern crate failure;
+extern crate anyhow;
 
-#[allow(unused_imports)] // the macro is used - but clippy fails to notice
+#[allow(unused_imports)] // the macros are used by the example only when the "bug" feature is on
 #[macro_use]
 extern crate log;
 
+extern crate thiserror;
+
 mod cli;
+mod errors;
+
+use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
-mod errors;
-use errors::*;
-
-fn parse_arguments() -> Result<ReturnCode, failure::Error> {
+fn parse_arguments() -> Result<ReturnCode> {
 	use structopt::StructOpt;
 	match Args::from_iter_safe(std::env::args_os()) {
 		Ok(args) => cli::main(args),
@@ -37,23 +40,8 @@ fn parse_arguments() -> Result<ReturnCode, failure::Error> {
 	}
 }
 
-fn report_error(e: &dyn failure::Fail) {
-	eprintln!();
-	eprintln!("Oops!");
-	eprintln!("An unexpected error occurred. Please provide the error message below and any way to cause this error to the maintainers of this program.");
-
-	eprintln!();
-	eprintln!("{}", e.display_chain());
-
-	std::process::exit(ReturnCode::UnhandledFailure as i32);
-}
-
-use failure::ResultExt;
-
-fn main() {
+fn main() -> Result<()> {
 	parse_arguments()
 		.map(|return_code| std::process::exit(return_code as i32))
 		.context("Uncaught error in main")
-		.map_err(|error| report_error(&error))
-		.ok();
 }
