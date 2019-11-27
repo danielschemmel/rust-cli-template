@@ -1,5 +1,3 @@
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
 // By default, forbid unsafe code - your project may need to change this setting
 #![forbid(unsafe_code)]
 
