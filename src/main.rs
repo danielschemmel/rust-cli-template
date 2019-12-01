@@ -9,8 +9,6 @@ extern crate anyhow;
 #[macro_use]
 extern crate log;
 
-extern crate thiserror;
-
 mod cli;
 mod errors;
 
