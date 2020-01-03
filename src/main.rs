@@ -3,10 +3,6 @@
 
 #[allow(unused_imports)] // the macros are used by the example only when the "bug" feature is on
 #[macro_use]
-extern crate anyhow;
-
-#[allow(unused_imports)] // the macros are used by the example only when the "bug" feature is on
-#[macro_use]
 extern crate log;
 
 mod cli;

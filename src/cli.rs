@@ -69,10 +69,10 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 
 	println!("{:?}", args);
 
+	use anyhow::{anyhow, Context};
+
 	error!("A bug is about to occur!");
 	let error = anyhow!("The bug feature is enabled");
-
-	use anyhow::Context;
 	Err(error).context("Some context for where the error caused problems")?;
 
 	Ok(ReturnCode::Success)
