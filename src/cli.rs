@@ -48,12 +48,16 @@ pub enum ReturnCode {
 	ArgumentParsing = 1,
 }
 
-#[cfg(not(feature = "bug"))]
-pub fn main(args: Args) -> Result<ReturnCode> {
-	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
+fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> {
+	flexi_logger::Logger::with_env_or_str("warn, application=debug")
 		.format(flexi_logger::colored_with_thread)
 		.start()
-		.map_err(LoggingError::CreationFailure)?;
+		.map_err(LoggingError::CreationFailure)
+}
+
+#[cfg(not(feature = "bug"))]
+pub fn main(args: Args) -> Result<ReturnCode> {
+	let _log_handle = create_logger()?;
 
 	println!("{:?}", args);
 
@@ -62,10 +66,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 
 #[cfg(feature = "bug")]
 pub fn main(args: Args) -> Result<ReturnCode> {
-	let _log_handle = flexi_logger::Logger::with_env_or_str("warn, application=debug")
-		.format(flexi_logger::colored_with_thread)
-		.start()
-		.map_err(LoggingError::CreationFailure)?;
+	let _log_handle = create_logger()?;
 
 	println!("{:?}", args);
 
@@ -76,4 +77,22 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	Err(error).context("Some context for where the error caused problems")?;
 
 	Ok(ReturnCode::Success)
+}
+
+#[cfg(test)]
+mod test {
+	use super::*;
+	use pretty_assertions::{assert_eq, assert_ne};
+
+	#[test]
+	pub fn test_pretty_assertions_dummy() {
+		assert_eq!(Some(1), Some(1));
+		assert_ne!(Some(1), Some(2));
+	}
+
+	#[test]
+	pub fn test_create_logger() {
+		let log_handle = create_logger();
+		assert!(log_handle.is_ok());
+	}
 }
