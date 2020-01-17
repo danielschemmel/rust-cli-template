@@ -12,15 +12,17 @@ use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
 fn parse_arguments() -> Result<ReturnCode> {
+	use structopt::clap::ErrorKind;
 	use structopt::StructOpt;
+
 	match Args::from_iter_safe(std::env::args_os()) {
 		Ok(args) => cli::main(args),
 		Err(e) => match e.kind {
-			structopt::clap::ErrorKind::VersionDisplayed => {
+			ErrorKind::VersionDisplayed => {
 				println!("{}", e.message);
 				Ok(ReturnCode::Success)
 			}
-			structopt::clap::ErrorKind::HelpDisplayed => {
+			ErrorKind::HelpDisplayed => {
 				println!("{}", e.message);
 				Ok(ReturnCode::Success)
 			}
