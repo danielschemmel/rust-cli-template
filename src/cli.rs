@@ -88,6 +88,8 @@ mod test {
 	pub fn test_pretty_assertions_dummy() {
 		assert_eq!(Some(1), Some(1));
 		assert_ne!(Some(1), Some(2));
+		#[cfg(feature = "bug")]
+		assert_eq!(1000000, 1_000_000);
 	}
 
 	#[test]
