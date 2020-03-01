@@ -38,4 +38,3 @@ jobs:
         run: cargo build ${{ matrix.feature_bug }} ${{ matrix.feature_subcommands }} --verbose
       - name: Run tests
         run: cargo test ${{ matrix.feature_bug }} ${{ matrix.feature_subcommands }} --verbose
-
