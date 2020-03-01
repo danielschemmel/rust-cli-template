@@ -43,6 +43,7 @@ pub enum Args {
 	},
 }
 
+#[derive(Copy, Clone)]
 pub enum ReturnCode {
 	Success = 0,
 	ArgumentParsing = 1,
@@ -83,6 +84,11 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 mod test {
 	use super::*;
 	use pretty_assertions::{assert_eq, assert_ne};
+
+	#[test]
+	pub fn test_return_code_success() {
+		assert_eq!(ReturnCode::Success as u8, 0);
+	}
 
 	#[test]
 	pub fn test_pretty_assertions_dummy() {
