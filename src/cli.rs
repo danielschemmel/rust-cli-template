@@ -56,7 +56,7 @@ pub enum ReturnCode {
 }
 
 fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> {
-	flexi_logger::Logger::with_env_or_str("warn, application=debug")
+	flexi_logger::Logger::with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))
 		.format(flexi_logger::colored_with_thread)
 		.start()
 		.map_err(LoggingError::CreationFailure)
