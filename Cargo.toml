@@ -23,3 +23,6 @@ thiserror = "1"
 
 [dev-dependencies]
 pretty_assertions = "0.6"
+
+[build-dependencies]
+vergen = "3"
