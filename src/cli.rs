@@ -20,6 +20,9 @@ pub struct Args {
 	/// Address to listen on.
 	#[structopt(short = "a", long = "address", default_value = "127.0.0.1")]
 	address: String,
+	/// Perform "work" by sleeping the specified amount of milliseconds
+	#[structopt(short = "s", long = "sleep", default_value = "0")]
+	sleep: u64,
 }
 
 #[cfg(feature = "subcommands")]
@@ -52,6 +55,7 @@ pub enum Args {
 #[derive(Copy, Clone)]
 pub enum ReturnCode {
 	Success = 0,
+	CtrlC = -1,
 	ArgumentParsing = 1,
 }
 
@@ -62,11 +66,33 @@ fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> 
 		.map_err(LoggingError::CreationFailure)
 }
 
+fn set_ctrlc_handler() -> Result<()> {
+	use std::sync::atomic::{AtomicBool, Ordering};
+	use std::sync::Arc;
+
+	let previous_ctrlc = Arc::new(AtomicBool::new(false));
+	ctrlc::set_handler(move || {
+		if (*previous_ctrlc).swap(true, Ordering::Relaxed) {
+			error!("Received Ctrl+C again: Terminating forcefully!");
+			println!("\nReceived Ctrl+C again: Terminating forcefully!");
+			std::process::exit(ReturnCode::CtrlC as i32);
+		} else {
+			warn!("Received Ctrl+C...");
+			println!("\nReceived Ctrl+C...");
+		}
+	})?;
+
+	Ok(())
+}
+
 #[cfg(not(feature = "bug"))]
 pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = create_logger()?;
+	set_ctrlc_handler()?;
 
 	println!("{:?}", args);
+
+	std::thread::sleep(std::time::Duration::from_millis(args.sleep));
 
 	Ok(ReturnCode::Success)
 }
@@ -74,6 +100,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 #[cfg(feature = "bug")]
 pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = create_logger()?;
+	set_ctrlc_handler()?;
 
 	println!("{:?}", args);
 
