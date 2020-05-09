@@ -9,6 +9,10 @@ description = "A sample application"
 edition = "2018"
 publish = false
 
+[profile.release]
+lto = "fat"  # options: true/"fat", "thin", false (leaves on *local* LTO), "off"
+codegen-units = 1  # more codegen units means fewer LTO optimization opportunities
+
 [features]
 default = []
 bug = []
