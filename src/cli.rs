@@ -62,6 +62,9 @@ pub enum ReturnCode {
 fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> {
 	flexi_logger::Logger::with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))
 		.format(flexi_logger::colored_with_thread)
+		//.log_target(flexi_logger::LogTarget::File)
+		//.format_for_files(flexi_logger::with_thread)
+		//.duplicate_to_stderr(flexi_logger::Duplicate::Warn)
 		.start()
 		.map_err(LoggingError::CreationFailure)
 }
@@ -73,7 +76,7 @@ fn set_ctrlc_handler() -> Result<()> {
 	let previous_ctrlc = Arc::new(AtomicBool::new(false));
 	ctrlc::set_handler(move || {
 		if (*previous_ctrlc).swap(true, Ordering::Relaxed) {
-			error!("Received Ctrl+C again: Terminating forcefully!");
+			warn!("Received Ctrl+C again: Terminating forcefully!");
 			println!("\nReceived Ctrl+C again: Terminating forcefully!");
 			std::process::exit(ReturnCode::CtrlC as i32);
 		} else {
@@ -90,7 +93,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = create_logger()?;
 	set_ctrlc_handler()?;
 
-	println!("{:?}", args);
+	info!("{:?}", args);
 
 	#[cfg(not(feature = "subcommands"))]
 	std::thread::sleep(std::time::Duration::from_millis(args.sleep));
@@ -103,7 +106,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	let _log_handle = create_logger()?;
 	set_ctrlc_handler()?;
 
-	println!("{:?}", args);
+	info!("{:?}", args);
 
 	use anyhow::{anyhow, Context};
 

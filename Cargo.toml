@@ -21,7 +21,7 @@ subcommands = []
 [dependencies]
 anyhow = "1"
 ctrlc = "3"
-flexi_logger = { version = "0.15", features = ["specfile", "ziplogs"] }
+flexi_logger = "0.15"
 log = "0.4"
 structopt = "0.3"
 thiserror = "1"
