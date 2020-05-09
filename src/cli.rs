@@ -92,6 +92,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 
 	println!("{:?}", args);
 
+	#[cfg(not(feature = "subcommands"))]
 	std::thread::sleep(std::time::Duration::from_millis(args.sleep));
 
 	Ok(ReturnCode::Success)
