@@ -20,9 +20,6 @@ pub struct Args {
 	/// Address to listen on.
 	#[structopt(short = "a", long = "address", default_value = "127.0.0.1")]
 	address: String,
-	/// Perform "work" by sleeping the specified amount of milliseconds
-	#[structopt(short = "s", long = "sleep", default_value = "0")]
-	sleep: u64,
 }
 
 #[cfg(feature = "subcommands")]
@@ -61,7 +58,11 @@ pub enum ReturnCode {
 
 fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> {
 	flexi_logger::Logger::with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))
-		.format(flexi_logger::colored_with_thread)
+		.format(if atty::is(atty::Stream::Stderr) {
+			flexi_logger::colored_with_thread
+		} else {
+			flexi_logger::with_thread
+		})
 		//.log_target(flexi_logger::LogTarget::File)
 		//.format_for_files(flexi_logger::with_thread)
 		//.duplicate_to_stderr(flexi_logger::Duplicate::Warn)
@@ -69,11 +70,13 @@ fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> 
 		.map_err(LoggingError::CreationFailure)
 }
 
-fn set_ctrlc_handler() -> Result<()> {
+fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
 	use std::sync::atomic::{AtomicBool, Ordering};
 	use std::sync::Arc;
 
+	let (sender, receiver) = std::sync::mpsc::sync_channel(1);
 	let previous_ctrlc = Arc::new(AtomicBool::new(false));
+
 	ctrlc::set_handler(move || {
 		if (*previous_ctrlc).swap(true, Ordering::Relaxed) {
 			warn!("Received Ctrl+C again: Terminating forcefully!");
@@ -82,28 +85,33 @@ fn set_ctrlc_handler() -> Result<()> {
 		} else {
 			warn!("Received Ctrl+C...");
 			println!("\nReceived Ctrl+C...");
+			sender
+				.send(())
+				.map_err(|e| error!("Could not notify main program: {}", e))
+				.ok();
 		}
 	})?;
 
-	Ok(())
+	Ok(receiver)
 }
 
 #[cfg(not(feature = "bug"))]
 pub fn main(args: Args) -> Result<ReturnCode> {
-	let _log_handle = create_logger()?;
-	set_ctrlc_handler()?;
+	let log_handle = create_logger()?;
+	let ctrlc = set_ctrlc_handler()?;
 
 	info!("{:?}", args);
 
-	#[cfg(not(feature = "subcommands"))]
-	std::thread::sleep(std::time::Duration::from_millis(args.sleep));
+	println!("Doing some work... Press ctrl+c to exit...");
+	ctrlc.recv().unwrap();
 
+	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 
 #[cfg(feature = "bug")]
 pub fn main(args: Args) -> Result<ReturnCode> {
-	let _log_handle = create_logger()?;
+	let log_handle = create_logger()?;
 	set_ctrlc_handler()?;
 
 	info!("{:?}", args);
@@ -114,6 +122,7 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	let error = anyhow!("The bug feature is enabled");
 	Err(error).context("Some context for where the error caused problems")?;
 
+	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 

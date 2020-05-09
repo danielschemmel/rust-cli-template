@@ -29,6 +29,7 @@ name = "application"
 version = "0.0.1"
 dependencies = [
  "anyhow",
+ "atty",
  "ctrlc",
  "flexi_logger",
  "log",
