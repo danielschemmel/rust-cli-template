@@ -5,7 +5,7 @@ use anyhow::Result;
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = concat!(env!("VERGEN_SEMVER"), "\n\nBuilt from commit ", env!("VERGEN_SHA"), " at ", env!("VERGEN_BUILD_TIMESTAMP"), " for ", env!("VERGEN_TARGET_TRIPLE"), "."),
+	version = build_info::format!("{.crate_info.version}\n\nBuilt from {.version_control} at {.timestamp} with rustc {.compiler.version} {.compiler.channel} ({.compiler.commit_hash}) for {.compiler.target_triple} on {.compiler.host_triple}."),
 )]
 pub struct Args {
 	/// Something, something, path
@@ -26,7 +26,7 @@ pub struct Args {
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = concat!(env!("VERGEN_SEMVER"), "\n\nBuilt from commit ", env!("VERGEN_SHA"), " at ", env!("VERGEN_BUILD_TIMESTAMP"), " for ", env!("VERGEN_TARGET_TRIPLE"), "."),
+	version = build_info::format!("{.crate_info.version}\n\nBuilt from {.version_control} at {.timestamp} with rustc {.compiler.version} {.compiler.channel} ({.compiler.commit_hash}) for {.compiler.target_triple} on {.compiler.host_triple}."),
 )]
 pub enum Args {
 	#[structopt(name = "file-based")]
