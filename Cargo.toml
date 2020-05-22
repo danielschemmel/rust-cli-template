@@ -1,7 +1,7 @@
 [package]
 # Metadata that is also used to generate the --help command:
 name = "application"
-version = "0.0.1"
+version = "0.0.0"
 authors = ["Daniel Schemmel"]
 description = "A sample application"
 
