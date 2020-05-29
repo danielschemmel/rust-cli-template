@@ -65,9 +65,9 @@ checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
 name = "build-info"
-version = "0.0.10"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3729e3e50fd44b4fa898e9b04a2e6a3f09bc47335d14f50fd41f149e45bbafa9"
+checksum = "fa451bb8ac1ce1d7f4e2a6c2e54e8d86459bd418505d42ac7d3725d1725c8daa"
 dependencies = [
  "build-info-proc",
  "proc-macro-hack",
@@ -75,9 +75,9 @@ dependencies = [
 
 [[package]]
 name = "build-info-build"
-version = "0.0.10"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "496a1210603d8a60c40752974e906e1a2d2fb6a674fcf7a0efaa317fd4e869da"
+checksum = "cd4e7159d56a74d71bd879d0d6209b1f772ed8775e5c17720c43ad475a3469fe"
 dependencies = [
  "anyhow",
  "build-info-common",
@@ -90,9 +90,9 @@ dependencies = [
 
 [[package]]
 name = "build-info-common"
-version = "0.0.10"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d4b64c33ad6ecfea86c558aafe75f9de2aace6ef2901649ee84545128ed4137"
+checksum = "c7199e2b9cb38d66f9b3f53de077e209d824c192e9cb9e8b66886e1ba29787ea"
 dependencies = [
  "chrono",
  "derive_more",
@@ -102,14 +102,15 @@ dependencies = [
 
 [[package]]
 name = "build-info-proc"
-version = "0.0.10"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30a43312f5f6b3166b6e52ccd2416da21fd378a9de54ee77c61b758ab3b35678"
+checksum = "7cbf624687856d38dc0f832dcf1d76d0ab53c4d5d07cb602260d0a74c06c8398"
 dependencies = [
  "build-info-common",
  "chrono",
  "format-buf",
  "proc-macro-crate",
+ "proc-macro-error",
  "proc-macro-hack",
  "proc-macro2",
  "quote",
@@ -462,9 +463,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.3.8"
+version = "1.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "226ddd1197737bcb937489322ec1b9edaac1709d46792886e70f2113923585a6"
+checksum = "9c3780fcf44b193bc4d09f36d2a3c87b251da4a046c87795a0d35f4f927ad8e6"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -587,9 +588,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.27"
+version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef781e621ee763a2a40721a8861ec519cb76966aee03bb5d00adb6a31dc1c1de"
+checksum = "e7e33a62f20d3dc02a1bc9c1d385f92b459bbf35e4dc325eed20c53db5b90c03"
 dependencies = [
  "proc-macro2",
  "quote",
