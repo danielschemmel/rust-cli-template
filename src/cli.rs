@@ -5,7 +5,7 @@ use anyhow::Result;
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = build_info::format!("{.crate_info.version}\n\nBuilt from {.version_control} at {.timestamp} with rustc {.compiler.version} {.compiler.channel} ({.compiler.commit_id}) for {.compiler.target_triple} on {.compiler.host_triple}."),
+	version = build_info::format!("{} {}\n\nBuilt from {} at {} with {} for {} on {}.", $.crate_info.version, $.profile, $.version_control, $.timestamp, $.compiler, $.compiler.target_triple, $.compiler.host_triple),
 )]
 pub struct Args {
 	/// Something, something, path
@@ -26,7 +26,7 @@ pub struct Args {
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = build_info::format!("{.crate_info.version}\n\nBuilt from {.version_control} at {.timestamp} with rustc {.compiler.version} {.compiler.channel} ({.compiler.commit_id}) for {.compiler.target_triple} on {.compiler.host_triple}."),
+	version = build_info::format!("{} {}\n\nBuilt from {} at {} with {} for {} on {}.", $.crate_info.version, $.profile, $.version_control, $.timestamp, $.compiler, $.compiler.target_triple, $.compiler.host_triple),
 )]
 pub enum Args {
 	#[structopt(name = "file-based")]

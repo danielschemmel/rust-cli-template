@@ -65,9 +65,9 @@ checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
 name = "build-info"
-version = "0.0.13"
+version = "0.0.17-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa451bb8ac1ce1d7f4e2a6c2e54e8d86459bd418505d42ac7d3725d1725c8daa"
+checksum = "caeddee630664ccd83a3cb0661a76f3f6a3abc664de52e3245d8aeec88eec829"
 dependencies = [
  "build-info-proc",
  "proc-macro-hack",
@@ -75,9 +75,9 @@ dependencies = [
 
 [[package]]
 name = "build-info-build"
-version = "0.0.13"
+version = "0.0.17-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd4e7159d56a74d71bd879d0d6209b1f772ed8775e5c17720c43ad475a3469fe"
+checksum = "c5287dc6ac3c226301b6b53be97e4bfb1119f300f73c081f344253c146a05b90"
 dependencies = [
  "anyhow",
  "build-info-common",
@@ -90,9 +90,9 @@ dependencies = [
 
 [[package]]
 name = "build-info-common"
-version = "0.0.13"
+version = "0.0.17-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7199e2b9cb38d66f9b3f53de077e209d824c192e9cb9e8b66886e1ba29787ea"
+checksum = "04083f23283031aa486b2d5cb1796b1f40b86d154bf031d34c9b60dfcb1894d2"
 dependencies = [
  "chrono",
  "derive_more",
@@ -102,13 +102,16 @@ dependencies = [
 
 [[package]]
 name = "build-info-proc"
-version = "0.0.13"
+version = "0.0.17-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cbf624687856d38dc0f832dcf1d76d0ab53c4d5d07cb602260d0a74c06c8398"
+checksum = "92f9a7dba1e392a7c48fad79f741d2e60d090a870ac70d671f2dcfef975948c1"
 dependencies = [
+ "anyhow",
  "build-info-common",
  "chrono",
  "format-buf",
+ "num-bigint",
+ "num-traits",
  "proc-macro-crate",
  "proc-macro-error",
  "proc-macro-hack",
@@ -116,6 +119,7 @@ dependencies = [
  "quote",
  "serde_json",
  "syn",
+ "thiserror",
 ]
 
 [[package]]
@@ -162,9 +166,9 @@ dependencies = [
 
 [[package]]
 name = "ctor"
-version = "0.1.14"
+version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf6b25ee9ac1995c54d7adb2eff8cfffb7260bc774fb63c601ec65467f43cd9d"
+checksum = "39858aa5bac06462d4dd4b9164848eb81ffc4aa5c479746393598fd193afa227"
 dependencies = [
  "quote",
  "syn",
@@ -199,9 +203,9 @@ checksum = "524cbf6897b527295dff137cec09ecf3a05f4fddffd7dfcd1585403449e74198"
 
 [[package]]
 name = "flexi_logger"
-version = "0.15.3"
+version = "0.15.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05c581f9d53974dbc82897c1e647868a8a6fc10603f85bbde0bed49e235cf88f"
+checksum = "c837088d387a71ab1a9d8ee0e98ef6c395a01e5229a9b56203116ddf3841c608"
 dependencies = [
  "chrono",
  "glob",
@@ -351,6 +355,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-bigint"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "090c7f9998ee0ff65aa5b723e4009f7b217707f1fb5ea551329cc4d6231fb304"
+dependencies = [
+ "autocfg",
+ "num-integer",
+ "num-traits",
+]
+
+[[package]]
 name = "num-integer"
 version = "0.1.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -454,9 +469,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.6"
+version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "54a21852a652ad6f610c9510194f398ff6f8692e334fd1145fed931f7fbe44ea"
+checksum = "aa563d17ecb180e500da1cfd2b028310ac758de548efdd203e18f283af693f37"
 dependencies = [
  "proc-macro2",
 ]
@@ -541,9 +556,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.53"
+version = "1.0.54"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "993948e75b189211a9b31a7528f950c6adc21f9720b6438ff80a7fa2f864cea2"
+checksum = "cfe4c1f6427dbc29329c6288e9e748b8b8e0ea42a0aab733e887fa72c22e965d"
 dependencies = [
  "itoa",
  "ryu",
