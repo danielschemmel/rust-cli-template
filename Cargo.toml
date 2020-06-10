@@ -23,8 +23,8 @@ anyhow = "1"
 atty = "0.2"
 build-info = { version = "0.0.20", default_features = false }
 ctrlc = "3"
-flexi_logger = "0.15"
-log = "0.4"
+tracing = "0.1"
+tracing-subscriber = "0.2"
 structopt = "0.3"
 thiserror = "1"
 

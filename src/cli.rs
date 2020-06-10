@@ -1,5 +1,9 @@
+use anyhow::{anyhow, Context, Result};
+use tracing::{error, info, instrument};
+use tracing_subscriber::filter::EnvFilter;
+use tracing_subscriber::FmtSubscriber;
+
 use crate::errors::*;
-use anyhow::Result;
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
@@ -56,18 +60,69 @@ pub enum ReturnCode {
 	ArgumentParsing = 1,
 }
 
-fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> {
-	flexi_logger::Logger::with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))
-		.format(if atty::is(atty::Stream::Stderr) {
-			flexi_logger::colored_with_thread
-		} else {
-			flexi_logger::with_thread
-		})
-		//.log_target(flexi_logger::LogTarget::File)
-		//.format_for_files(flexi_logger::with_thread)
-		//.duplicate_to_stderr(flexi_logger::Duplicate::Warn)
-		.start()
-		.map_err(LoggingError::CreationFailure)
+fn create_logger() -> Result<(), LoggingError> {
+	/// used if `RUST_LOG` is not set
+	const DEFAULT_FILTER: &str = build_info::format!("warn,{}=debug", $.crate_info.name);
+
+	/// used if the filter provided in `RUST_LOG` cannot be parsed
+	const BACKUP_FILTER: &str = build_info::format!("warn,{}=debug", $.crate_info.name);
+
+	let timer = tracing_subscriber::fmt::time::Uptime::default();
+	// let timer = tracing_subscriber::fmt::time::Uptime::default();
+	// let timer = tracing_subscriber::fmt::time::Uptime::default();
+
+	let mut delayed_errors: Vec<anyhow::Error> = Vec::new();
+
+	use std::env::VarError;
+	let env_filter = match std::env::var(EnvFilter::DEFAULT_ENV) {
+		Ok(value) => EnvFilter::try_new(&value)
+			.with_context(|| {
+				anyhow!(
+					"Could not parse value of the environment variable `{}` ({:?}) as a logging filter. Using {:?} instead.",
+					EnvFilter::DEFAULT_ENV,
+					&value,
+					BACKUP_FILTER
+				)
+			})
+			.unwrap_or_else(|parse_error| {
+				delayed_errors.push(parse_error);
+				EnvFilter::new(BACKUP_FILTER)
+			}),
+		Err(err) => match &err {
+			VarError::NotUnicode(_) => {
+				delayed_errors.push(
+					Result::<(), VarError>::Err(err)
+						.with_context(|| {
+							anyhow!(
+								"Could not parse value of the environment variable `{}` as a logging filter. Using {:?} instead.",
+								EnvFilter::DEFAULT_ENV,
+								BACKUP_FILTER
+							)
+						})
+						.unwrap_err(),
+				);
+				EnvFilter::new(BACKUP_FILTER)
+			}
+			VarError::NotPresent => EnvFilter::new(DEFAULT_FILTER),
+		},
+	};
+
+	let builder = FmtSubscriber::builder()
+		.with_env_filter(env_filter)
+		.with_timer(timer)
+		.with_writer(std::io::stderr)
+		.with_ansi(atty::is(atty::Stream::Stderr));
+	builder.try_init().map_err(|e| anyhow!(e))?;
+
+	for err in &delayed_errors {
+		error!("{}", err);
+	}
+
+	if delayed_errors.is_empty() {
+		Ok(())
+	} else {
+		Err(delayed_errors.into_iter().next().unwrap().into())
+	}
 }
 
 /// Returns a receiver that is signalled when `SIGINT` is received, e.g., when the user hits Ctrl+C. If the receiver
@@ -96,8 +151,9 @@ fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
 }
 
 #[cfg(not(feature = "bug"))]
+#[instrument]
 pub fn main(args: Args) -> Result<ReturnCode> {
-	let log_handle = create_logger()?;
+	create_logger()?;
 	let ctrlc = set_ctrlc_handler()?;
 
 	info!("{:?}", args);
@@ -105,24 +161,21 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	println!("Doing some work... Press ctrl+c to exit...");
 	ctrlc.recv().unwrap();
 
-	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 
 #[cfg(feature = "bug")]
+#[instrument]
 pub fn main(args: Args) -> Result<ReturnCode> {
-	let log_handle = create_logger()?;
+	create_logger()?;
 	set_ctrlc_handler()?;
 
 	info!("{:?}", args);
-
-	use anyhow::{anyhow, Context};
 
 	error!("A bug is about to occur!");
 	let error = anyhow!("The bug feature is enabled");
 	Err(error).context("Some context for where the error caused problems")?;
 
-	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 

@@ -4,7 +4,7 @@ use thiserror::Error;
 pub enum LoggingError {
 	#[error("Failed to create logger")]
 	CreationFailure(
-		#[from] flexi_logger::FlexiLoggerError,
+		#[from] anyhow::Error,
 		// backtrace: std::backtrace::Backtrace,
 	),
 }

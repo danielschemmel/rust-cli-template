@@ -1,10 +1,6 @@
 // By default, forbid unsafe code - your project may need to change this setting
 #![forbid(unsafe_code)]
 
-#[allow(unused_imports)] // the macros are used by the example only when the "bug" feature is on
-#[macro_use]
-extern crate log;
-
 mod cli;
 mod errors;
 
