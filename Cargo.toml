@@ -2,7 +2,7 @@
 # Metadata that is also used to generate the --help command:
 name = "application"
 version = "0.0.0"
-authors = ["Daniel Schemmel"]
+authors = ["Daniel Schemmel <daniel@schemmel.net"]
 description = "A sample application"
 
 # Other metadata
