@@ -70,6 +70,8 @@ fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> 
 		.map_err(LoggingError::CreationFailure)
 }
 
+/// Returns a receiver that is signalled when `SIGINT` is received, e.g., when the user hits Ctrl+C. If the receiver
+/// is dropped or not serviced quickly enough, the program is terminated automatically.
 fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
 	let (sender, receiver) = std::sync::mpsc::sync_channel(1);
 
