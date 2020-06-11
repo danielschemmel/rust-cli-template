@@ -58,6 +58,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
 
 [[package]]
+name = "base64"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53d1ccbaf7d9ec9537465a97bf19edc1a4e158ecb49fc16178202238c569cc42"
+
+[[package]]
+name = "bincode"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5753e2a71534719bf3f4e57006c3a4f0d2c672a4b676eec84161f763eca87dbf"
+dependencies = [
+ "byteorder",
+ "serde",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -65,9 +81,9 @@ checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 
 [[package]]
 name = "build-info"
-version = "0.0.17"
+version = "0.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b90d47e1efee64e87f12b5d45ddc9294f31b1d891d69dcb45c38a9049482383b"
+checksum = "dc3d9a53f85ac2a4f25100900b47eee0f1f76d4d073983ae2000cdad5b451a00"
 dependencies = [
  "build-info-proc",
  "proc-macro-hack",
@@ -75,24 +91,29 @@ dependencies = [
 
 [[package]]
 name = "build-info-build"
-version = "0.0.17"
+version = "0.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41ded79611b17b551f6ee83e738bc5cceec916923a50b10728fa93d98935b785"
+checksum = "0c5dafd462d6ff76bad50fc524c2222d6425cf050fe79ced676071e7e0b97a0f"
 dependencies = [
  "anyhow",
+ "base64",
+ "bincode",
  "build-info-common",
+ "cargo_metadata",
  "git2",
  "glob",
+ "lazy_static",
+ "pretty_assertions",
  "rustc_version",
  "serde_json",
- "toml",
+ "xz2",
 ]
 
 [[package]]
 name = "build-info-common"
-version = "0.0.17"
+version = "0.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eeb6c335c622977aae5c05b5f7eebe4be61f9af99f1584ffc13b18a3f0aef82b"
+checksum = "61e67fe3afd71e90b371645a470a104f77a315e1501e9c95dabaafa91af6b280"
 dependencies = [
  "chrono",
  "derive_more",
@@ -102,11 +123,13 @@ dependencies = [
 
 [[package]]
 name = "build-info-proc"
-version = "0.0.17"
+version = "0.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b26d8c333dd53d72024aa60c74d04d52727509b7886fb875383a7fb65617b36f"
+checksum = "aea4e0972daab76cc7c93106eafe0f564b24facb50c1f9cf2a907133ab9e0c50"
 dependencies = [
  "anyhow",
+ "base64",
+ "bincode",
  "build-info-common",
  "chrono",
  "format-buf",
@@ -119,7 +142,25 @@ dependencies = [
  "quote",
  "serde_json",
  "syn",
- "thiserror",
+ "xz2",
+]
+
+[[package]]
+name = "byteorder"
+version = "1.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08c48aae112d48ed9f069b33538ea9e3e90aa263cfa3d1c24309612b1f7472de"
+
+[[package]]
+name = "cargo_metadata"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8de60b887edf6d74370fc8eb177040da4847d971d6234c7b13a6da324ef0caf"
+dependencies = [
+ "semver 0.9.0",
+ "serde",
+ "serde_derive",
+ "serde_json",
 ]
 
 [[package]]
@@ -330,6 +371,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "lzma-sys"
+version = "0.1.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f24f76ec44a8ac23a31915d6e326bca17ce88da03096f1ff194925dc714dac99"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
+]
+
+[[package]]
 name = "matches"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -516,6 +568,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1d7eb9ef2c18661902cc47e535f9bc51b78acd254da71d375c2f6720d9a40403"
 dependencies = [
  "semver-parser",
+ "serde",
 ]
 
 [[package]]
@@ -772,6 +825,15 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+
+[[package]]
+name = "xz2"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c179869f34fc7c01830d3ce7ea2086bc3a07e0d35289b667d0a8bf910258926c"
+dependencies = [
+ "lzma-sys",
+]
 
 [[package]]
 name = "yansi"
