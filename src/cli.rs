@@ -71,24 +71,21 @@ fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> 
 }
 
 fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
-	use std::sync::atomic::{AtomicBool, Ordering};
-	use std::sync::Arc;
-
 	let (sender, receiver) = std::sync::mpsc::sync_channel(1);
-	let previous_ctrlc = Arc::new(AtomicBool::new(false));
 
 	ctrlc::set_handler(move || {
-		if (*previous_ctrlc).swap(true, Ordering::Relaxed) {
-			warn!("Received Ctrl+C again: Terminating forcefully!");
-			println!("\nReceived Ctrl+C again: Terminating forcefully!");
-			std::process::exit(ReturnCode::CtrlC as i32);
-		} else {
-			warn!("Received Ctrl+C...");
-			println!("\nReceived Ctrl+C...");
-			sender
-				.send(())
-				.map_err(|e| error!("Could not notify main program: {}", e))
-				.ok();
+		match sender.try_send(()) {
+			Ok(()) => {
+				eprintln!("\nReceived Ctrl+C...");
+			}
+			Err(std::sync::mpsc::TrySendError::Full(())) => {
+				eprintln!("\nReceived Ctrl+C again: Terminating forcefully!");
+				std::process::exit(ReturnCode::CtrlC as i32);
+			}
+			Err(std::sync::mpsc::TrySendError::Disconnected(())) => {
+				eprintln!("\nReceived Ctrl+C. Terminating now.");
+				std::process::exit(ReturnCode::CtrlC as i32);
+			}
 		}
 	})?;
 
