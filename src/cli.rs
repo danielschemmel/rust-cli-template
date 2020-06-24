@@ -75,22 +75,20 @@ fn create_logger() -> Result<flexi_logger::ReconfigurationHandle, LoggingError> 
 fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
 	let (sender, receiver) = std::sync::mpsc::sync_channel(1);
 
-	ctrlc::set_handler(move || {
-		match sender.try_send(()) {
-			Ok(()) => {
-				eprintln!("\nReceived Ctrl+C...");
-				info!("Received Ctrl+C");
-			}
-			Err(std::sync::mpsc::TrySendError::Full(())) => {
-				eprintln!("\nReceived Ctrl+C again: Terminating forcefully!");
-				error!("Received Ctrl+C again: Terminating forcefully!");
-				std::process::exit(ReturnCode::CtrlC as i32);
-			}
-			Err(std::sync::mpsc::TrySendError::Disconnected(())) => {
-				eprintln!("\nReceived Ctrl+C. Terminating now.");
-				error!("Received Ctrl+C again. Terminating now.");
-				std::process::exit(ReturnCode::CtrlC as i32);
-			}
+	ctrlc::set_handler(move || match sender.try_send(()) {
+		Ok(()) => {
+			eprintln!("\nReceived Ctrl+C...");
+			info!("Received Ctrl+C");
+		}
+		Err(std::sync::mpsc::TrySendError::Full(())) => {
+			eprintln!("\nReceived Ctrl+C again: Terminating forcefully!");
+			error!("Received Ctrl+C again: Terminating forcefully!");
+			std::process::exit(ReturnCode::CtrlC as i32);
+		}
+		Err(std::sync::mpsc::TrySendError::Disconnected(())) => {
+			eprintln!("\nReceived Ctrl+C. Terminating now.");
+			error!("Received Ctrl+C again. Terminating now.");
+			std::process::exit(ReturnCode::CtrlC as i32);
 		}
 	})?;
 
