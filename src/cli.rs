@@ -57,7 +57,7 @@ pub enum ReturnCode {
 }
 
 fn create_logger() -> Result<flexi_logger::LoggerHandle, LoggingError> {
-	flexi_logger::Logger::with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))
+	flexi_logger::Logger::try_with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))?
 		.format(if atty::is(atty::Stream::Stderr) {
 			flexi_logger::colored_with_thread
 		} else {
