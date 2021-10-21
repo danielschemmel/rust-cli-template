@@ -1,5 +1,5 @@
-use crate::errors::*;
 use anyhow::Result;
+use tracing::{error, info};
 
 #[cfg(not(feature = "subcommands"))]
 #[derive(structopt::StructOpt, Debug)]
@@ -56,7 +56,9 @@ pub enum ReturnCode {
 	ArgumentParsing = 1,
 }
 
-fn create_logger() -> Result<flexi_logger::LoggerHandle, LoggingError> {
+fn create_logger() {
+	tracing_subscriber::fmt::init();
+	/*
 	flexi_logger::Logger::try_with_env_or_str(concat!("warn, ", env!("CARGO_PKG_NAME"), "=debug"))?
 		.format(if atty::is(atty::Stream::Stderr) {
 			flexi_logger::colored_with_thread
@@ -67,25 +69,25 @@ fn create_logger() -> Result<flexi_logger::LoggerHandle, LoggingError> {
 		//.format_for_files(flexi_logger::with_thread)
 		//.duplicate_to_stderr(flexi_logger::Duplicate::Warn)
 		.start()
-		.map_err(LoggingError::CreationFailure)
+		.map_err(LoggingError::CreationFailure)*/
 }
 
 /// Returns a receiver that is signalled when `SIGINT` is received, e.g., when the user hits Ctrl+C. If the receiver
 /// is dropped or not serviced quickly enough, the program is terminated automatically.
-fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
-	let (sender, receiver) = std::sync::mpsc::sync_channel(1);
+fn set_ctrlc_handler() -> Result<tokio::sync::mpsc::Receiver<()>> {
+	let (sender, receiver) = tokio::sync::mpsc::channel(1);
 
 	ctrlc::set_handler(move || match sender.try_send(()) {
 		Ok(()) => {
 			eprintln!("\nReceived Ctrl+C...");
 			info!("Received Ctrl+C");
 		}
-		Err(std::sync::mpsc::TrySendError::Full(())) => {
+		Err(tokio::sync::mpsc::error::TrySendError::Full(())) => {
 			eprintln!("\nReceived Ctrl+C again: Terminating forcefully!");
 			error!("Received Ctrl+C again: Terminating forcefully!");
 			std::process::exit(ReturnCode::CtrlC as i32);
 		}
-		Err(std::sync::mpsc::TrySendError::Disconnected(())) => {
+		Err(tokio::sync::mpsc::error::TrySendError::Closed(())) => {
 			eprintln!("\nReceived Ctrl+C. Terminating now.");
 			error!("Received Ctrl+C again. Terminating now.");
 			std::process::exit(ReturnCode::CtrlC as i32);
@@ -96,22 +98,21 @@ fn set_ctrlc_handler() -> Result<std::sync::mpsc::Receiver<()>> {
 }
 
 #[cfg(not(feature = "bug"))]
-pub fn main(args: Args) -> Result<ReturnCode> {
-	let log_handle = create_logger()?;
-	let ctrlc = set_ctrlc_handler()?;
+pub async fn main(args: Args) -> Result<ReturnCode> {
+	create_logger();
+	let mut ctrlc = set_ctrlc_handler()?;
 
 	info!("{:?}", args);
 
 	println!("Doing some work... Press ctrl+c to exit...");
-	ctrlc.recv().unwrap();
+	ctrlc.recv().await;
 
-	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 
 #[cfg(feature = "bug")]
-pub fn main(args: Args) -> Result<ReturnCode> {
-	let log_handle = create_logger()?;
+pub async fn main(args: Args) -> Result<ReturnCode> {
+	create_logger();
 	set_ctrlc_handler()?;
 
 	info!("{:?}", args);
@@ -122,7 +123,6 @@ pub fn main(args: Args) -> Result<ReturnCode> {
 	let error = anyhow!("The bug feature is enabled");
 	Err(error).context("Some context for where the error caused problems")?;
 
-	log_handle.shutdown();
 	Ok(ReturnCode::Success)
 }
 
@@ -140,11 +140,5 @@ mod test {
 	pub fn test_pretty_assertions_dummy() {
 		assert_eq!(Some(1), Some(1));
 		assert_ne!(Some(1), Some(2));
-	}
-
-	#[test]
-	pub fn test_create_logger() {
-		let log_handle = create_logger();
-		assert!(log_handle.is_ok());
 	}
 }
