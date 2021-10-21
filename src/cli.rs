@@ -65,19 +65,25 @@ fn create_logger() -> anyhow::Result<()> {
 		EnvFilter::try_new(concat!("warn,", env!("CARGO_PKG_NAME"), "=debug"))?
 	};
 
-	tracing_subscriber::fmt()
+	let subscriber = tracing_subscriber::fmt()
 		.with_target(true)
 		.with_timer(tracing_subscriber::fmt::time::uptime())
 		.with_level(true)
 		.with_thread_ids(true)
 		.with_thread_names(true)
-		.with_env_filter(env_filter)
+		.with_env_filter(env_filter);
+
+	#[cfg(not(test))]
+	let subscriber = subscriber
 		.with_ansi(atty::is(atty::Stream::Stdout))
-		.with_writer(std::io::stdout)
-		// `cargo test` does not actually support stdout. With `with_test_writer`, logging is delivered as intended.
-		.with_test_writer()
-		// Set the subscriber as the default and also installs a mechanic for transmuting `log` events into `tracing` events.
-		.init();
+		.with_writer(std::io::stdout);
+
+	#[cfg(test)]
+	// `cargo test` does not actually support stdout. With `with_test_writer`, logging is delivered as intended.
+	let subscriber = subscriber.with_test_writer();
+
+	// Set the subscriber as the default and also installs a mechanic for transmuting `log` events into `tracing` events.
+	subscriber.init();
 
 	Ok(())
 }
@@ -111,7 +117,7 @@ fn set_ctrlc_handler() -> Result<tokio::sync::mpsc::Receiver<()>> {
 pub async fn main(args: Args) -> Result<ReturnCode> {
 	create_logger()?;
 	let mut ctrlc = set_ctrlc_handler()?;
-	
+
 	info!("{:?}", args);
 
 	println!("Doing some work... Press ctrl+c to exit...");
@@ -155,7 +161,7 @@ mod test {
 	#[test]
 	pub fn log_error() -> anyhow::Result<()> {
 		create_logger()?;
-		
+
 		error!("Logging an \"error\"");
 
 		Ok(())
