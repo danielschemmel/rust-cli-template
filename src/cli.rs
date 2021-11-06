@@ -5,7 +5,16 @@ use tracing::{error, info};
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = build_info::format!("{} {}\n\nBuilt from {} at {} with {} for {} on {}.", $.crate_info.version, $.profile, $.version_control, $.timestamp, $.compiler, $.compiler.target_triple, $.compiler.host_triple),
+	version = build_info::format!(
+		"{} {}\n\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
+		$.crate_info.version,
+		$.profile,
+		$.version_control,
+		$.timestamp,
+		$.compiler,
+		$.compiler.target_triple,
+		$.compiler.host_triple,
+		$.crate_info.enabled_features),
 )]
 pub struct Args {
 	/// Something, something, path
