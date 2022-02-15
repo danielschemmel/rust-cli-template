@@ -26,7 +26,7 @@ dependencies = [
  "build-info",
  "build-info-build",
  "ctrlc",
- "pretty_assertions 1.1.0",
+ "pretty_assertions",
  "structopt",
  "thiserror",
  "tokio",
@@ -74,9 +74,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "build-info"
-version = "0.0.24"
+version = "0.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19fbbf442dbe14f0cbc09b8dcf9ccf32537390fb25ea717430d3a18508c66c66"
+checksum = "9ba6aab796645620a69cbaca2eae382ce5bc5c86e15691a05e4b8676405280b2"
 dependencies = [
  "build-info-proc",
  "proc-macro-hack",
@@ -84,9 +84,9 @@ dependencies = [
 
 [[package]]
 name = "build-info-build"
-version = "0.0.24"
+version = "0.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c73c69ee8cdfec986e4827238488746f472a8d1dda9423ea113064fc33f1419c"
+checksum = "22a5f411661cae69a077c6c2e6b459c4474dd8507722abd7df5c5c3e77994332"
 dependencies = [
  "anyhow",
  "base64",
@@ -97,7 +97,7 @@ dependencies = [
  "git2",
  "glob",
  "lazy_static",
- "pretty_assertions 0.7.2",
+ "pretty_assertions",
  "rustc_version",
  "serde_json",
  "xz2",
@@ -105,21 +105,21 @@ dependencies = [
 
 [[package]]
 name = "build-info-common"
-version = "0.0.24"
+version = "0.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1a56f0765f909b7b4d7d5c7833e6c66bc1f63dab8046adc8effd568d676cd04"
+checksum = "b2283a43c396636e32eb6a4c2c4bcec4b10fc78debe2d8964ab84fe149086b79"
 dependencies = [
  "chrono",
  "derive_more",
- "semver 1.0.5",
+ "semver",
  "serde",
 ]
 
 [[package]]
 name = "build-info-proc"
-version = "0.0.24"
+version = "0.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62b85100fe8843c08f07f9065e3c6fd4a5dce6d13b953307faa98b7b5e1ea804"
+checksum = "ccf7bcaf579dd2d5343f257177f268fc6d8a86b23e46e50b08b371e579cfd757"
 dependencies = [
  "anyhow",
  "base64",
@@ -158,14 +158,13 @@ dependencies = [
 
 [[package]]
 name = "cargo_metadata"
-version = "0.13.1"
+version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "081e3f0755c1f380c2d010481b6fa2e02973586d5f2b24eebb7a2a1d98b143d8"
+checksum = "ba2ae6de944143141f6155a473a6b02f66c7c3f9f47316f802f80204ebfe6e12"
 dependencies = [
  "camino",
  "cargo-platform",
- "semver 0.11.0",
- "semver-parser",
+ "semver",
  "serde",
  "serde_json",
 ]
@@ -346,9 +345,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.117"
+version = "0.2.118"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e74d72e0f9b65b5b4ca49a346af3976df0f9c61d550727f349ecd559f251a26c"
+checksum = "06e509672465a0504304aa87f9f176f2b2b716ed8fb105ebe5c02dc6dce96a94"
 
 [[package]]
 name = "libgit2-sys"
@@ -493,15 +492,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 
 [[package]]
-name = "pest"
-version = "2.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10f4872ae94d7b90ae48754df22fd42ad52ce740b8f370b03da4835417403e53"
-dependencies = [
- "ucd-trie",
-]
-
-[[package]]
 name = "pin-project-lite"
 version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -512,18 +502,6 @@ name = "pkg-config"
 version = "0.3.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "58893f751c9b0412871a09abd62ecd2a00298c6c83befa223ef98c52aef40cbe"
-
-[[package]]
-name = "pretty_assertions"
-version = "0.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cab0e7c02cf376875e9335e0ba1da535775beb5450d21e1dffca068818ed98b"
-dependencies = [
- "ansi_term",
- "ctor",
- "diff",
- "output_vt100",
-]
 
 [[package]]
 name = "pretty_assertions"
@@ -615,7 +593,7 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfa0f585226d2e68097d4f95d113b15b83a82e819ab25717ec0590d9584ef366"
 dependencies = [
- "semver 1.0.5",
+ "semver",
 ]
 
 [[package]]
@@ -626,30 +604,11 @@ checksum = "73b4b750c782965c211b42f022f59af1fbceabdd026623714f104152f1ec149f"
 
 [[package]]
 name = "semver"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f301af10236f6df4160f7c3f04eec6dbc70ace82d23326abad5edee88801c6b6"
-dependencies = [
- "semver-parser",
- "serde",
-]
-
-[[package]]
-name = "semver"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0486718e92ec9a68fbed73bb5ef687d71103b142595b406835649bebd33f72c7"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "semver-parser"
-version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00b0bef5b7f9e0df16536d3961cfb6e84331c065b4066afb39768d0e319411f7"
-dependencies = [
- "pest",
 ]
 
 [[package]]
@@ -886,12 +845,6 @@ dependencies = [
  "tracing-core",
  "tracing-log",
 ]
-
-[[package]]
-name = "ucd-trie"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "56dee185309b50d1f11bfedef0fe6d036842e3fb77413abef29f8f8d1c5d4c1c"
 
 [[package]]
 name = "unicode-bidi"

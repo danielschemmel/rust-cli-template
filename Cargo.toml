@@ -21,7 +21,7 @@ subcommands = []
 [dependencies]
 anyhow = "1"
 atty = "0.2"
-build-info = { version = "0.0.24", default_features = false }
+build-info = { version = "0.0.25", default_features = false }
 ctrlc = "3"
 structopt = "0.3"
 thiserror = "1"
@@ -33,4 +33,4 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 pretty_assertions = "1"
 
 [build-dependencies]
-build-info-build = "0.0.24"
+build-info-build = "0.0.25"
