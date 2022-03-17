@@ -25,6 +25,7 @@ dependencies = [
  "atty",
  "build-info",
  "build-info-build",
+ "cargo-husky",
  "ctrlc",
  "pretty_assertions",
  "structopt",
@@ -146,6 +147,12 @@ checksum = "6f3132262930b0522068049f5870a856ab8affc80c70d08b6ecb785771a6fc23"
 dependencies = [
  "serde",
 ]
+
+[[package]]
+name = "cargo-husky"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b02b629252fe8ef6460461409564e2c21d0c8e77e0944f3d189ff06c4e932ad"
 
 [[package]]
 name = "cargo-platform"
