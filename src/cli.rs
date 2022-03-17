@@ -2,6 +2,7 @@ use anyhow::Result;
 use tracing::{error, info};
 
 #[cfg(not(feature = "subcommands"))]
+#[allow(dead_code)] // this is just a sample application
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
@@ -32,6 +33,7 @@ pub struct Args {
 }
 
 #[cfg(feature = "subcommands")]
+#[allow(dead_code)] // this is just a sample application
 #[derive(structopt::StructOpt, Debug)]
 #[structopt(
 	setting = structopt::clap::AppSettings::ColoredHelp,
