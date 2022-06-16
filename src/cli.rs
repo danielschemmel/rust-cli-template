@@ -155,8 +155,9 @@ pub async fn main(args: Args) -> Result<ReturnCode> {
 
 #[cfg(test)]
 mod test {
-	use super::*;
 	use pretty_assertions::{assert_eq, assert_ne};
+
+	use super::*;
 
 	#[test]
 	pub fn test_return_code_success() {
