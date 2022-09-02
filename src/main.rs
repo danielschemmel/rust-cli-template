@@ -7,8 +7,7 @@ use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
 async fn parse_arguments() -> Result<ReturnCode> {
-	use clap::ErrorKind;
-	use clap::Parser;
+	use clap::{ErrorKind, Parser};
 
 	match Args::try_parse() {
 		Ok(args) => cli::main(args).await,
