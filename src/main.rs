@@ -7,22 +7,22 @@ use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
 async fn parse_arguments() -> Result<ReturnCode> {
-	use structopt::clap::ErrorKind;
-	use structopt::StructOpt;
+	use clap::ErrorKind;
+	use clap::Parser;
 
-	match Args::from_iter_safe(std::env::args_os()) {
+	match Args::try_parse() {
 		Ok(args) => cli::main(args).await,
 		Err(e) => match e.kind {
-			ErrorKind::VersionDisplayed => {
-				println!("{}", e.message);
+			ErrorKind::DisplayVersion => {
+				e.print().expect("Could not print version");
 				Ok(ReturnCode::Success)
 			}
-			ErrorKind::HelpDisplayed => {
-				println!("{}", e.message);
+			ErrorKind::DisplayHelp => {
+				e.print().expect("Could not print help");
 				Ok(ReturnCode::Success)
 			}
 			_ => {
-				println!("{}", e.message);
+				e.print().expect("Could not print error");
 				Ok(ReturnCode::ArgumentParsing)
 			}
 		},

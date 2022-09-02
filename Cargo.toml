@@ -22,8 +22,8 @@ subcommands = []
 anyhow = "1"
 atty = "0.2"
 build-info = { version = "0.0.27", default_features = false }
+clap = { version = "3", features = ["derive", "env"] }
 ctrlc = "3"
-structopt = "0.3"
 thiserror = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }

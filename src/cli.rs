@@ -3,9 +3,8 @@ use tracing::{error, info};
 
 #[cfg(not(feature = "subcommands"))]
 #[allow(dead_code)] // this is just a sample application
-#[derive(structopt::StructOpt, Debug)]
-#[structopt(
-	setting = structopt::clap::AppSettings::ColoredHelp,
+#[derive(clap::Parser, Debug)]
+#[clap(
 	version = build_info::format!(
 		"{} {}\n\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
 		$.crate_info.version,
@@ -19,16 +18,16 @@ use tracing::{error, info};
 )]
 pub struct Args {
 	/// Something, something, path
-	#[structopt(name = "FILE")]
+	#[clap(name = "FILE")]
 	file: std::path::PathBuf,
 	/// Optional blubber command
-	#[structopt(name = "BLUBBER")]
+	#[clap(name = "BLUBBER")]
 	blubber: Option<String>,
 	/// Port to listen on.
-	#[structopt(short = "p", long = "port", env = "PORT", default_value = "8080")]
+	#[clap(short = 'p', long = "port", env = "PORT", default_value = "8080")]
 	port: u16,
 	/// Address to listen on.
-	#[structopt(short = "a", long = "address", default_value = "127.0.0.1")]
+	#[clap(short = 'a', long = "address", default_value = "127.0.0.1")]
 	address: String,
 }
 
