@@ -33,28 +33,36 @@ pub struct Args {
 
 #[cfg(feature = "subcommands")]
 #[allow(dead_code)] // this is just a sample application
-#[derive(structopt::StructOpt, Debug)]
-#[structopt(
-	setting = structopt::clap::AppSettings::ColoredHelp,
-	version = build_info::format!("{} {}\n\nBuilt from {} at {} with {} for {} on {}.", $.crate_info.version, $.profile, $.version_control, $.timestamp, $.compiler, $.compiler.target_triple, $.compiler.host_triple),
+#[derive(clap::Parser, Debug)]
+#[clap(
+	version = build_info::format!(
+		"{} {}\n\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
+		$.crate_info.version,
+		$.profile,
+		$.version_control,
+		$.timestamp,
+		$.compiler,
+		$.compiler.target_triple,
+		$.compiler.host_triple,
+		$.crate_info.enabled_features),
 )]
 pub enum Args {
-	#[structopt(name = "file-based")]
+	#[clap(name = "file-based")]
 	FileBased {
 		/// Something, something, path
-		#[structopt(name = "FILE")]
+		#[clap(name = "FILE")]
 		file: std::path::PathBuf,
 		/// Optional blubber command
-		#[structopt(name = "BLUBBER")]
+		#[clap(name = "BLUBBER")]
 		blubber: Option<String>,
 	},
-	#[structopt(name = "network-based")]
+	#[clap(name = "network-based")]
 	NetworkBased {
 		/// Port to listen on.
-		#[structopt(short = "p", long = "port", env = "PORT", default_value = "8080")]
+		#[clap(short = 'p', long = "port", env = "PORT", default_value = "8080")]
 		port: u16,
 		/// Address to listen on.
-		#[structopt(short = "a", long = "address", default_value = "127.0.0.1")]
+		#[clap(short = 'a', long = "address", default_value = "127.0.0.1")]
 		address: String,
 	},
 }
