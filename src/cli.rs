@@ -113,7 +113,7 @@ fn create_logger() -> anyhow::Result<()> {
 }
 
 /// Returns a receiver that is signalled when `SIGINT` is received, e.g., when the user hits Ctrl+C. If the receiver
-/// is dropped or not serviced quickly enough, the program is terminated automatically.
+/// has been dropped or not serviced quickly enough, the program is terminated automatically upon receiving a signal.
 fn set_ctrlc_handler() -> Result<tokio::sync::mpsc::Receiver<()>> {
 	let (sender, receiver) = tokio::sync::mpsc::channel(1);
 
