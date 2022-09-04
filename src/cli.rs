@@ -6,7 +6,7 @@ use tracing::{error, info};
 #[derive(clap::Parser, Debug)]
 #[clap(
 	version = build_info::format!(
-		"{} {}\n\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
+		"{} {}\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
 		$.crate_info.version,
 		$.profile,
 		$.version_control,
@@ -15,6 +15,8 @@ use tracing::{error, info};
 		$.compiler.target_triple,
 		$.compiler.host_triple,
 		$.crate_info.enabled_features),
+	about,
+	long_about = None,
 )]
 pub struct Args {
 	/// Something, something, path
@@ -35,8 +37,10 @@ pub struct Args {
 #[allow(dead_code)] // this is just a sample application
 #[derive(clap::Parser, Debug)]
 #[clap(
+	about,
+	long_about = None,
 	version = build_info::format!(
-		"{} {}\n\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
+		"{} {}\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
 		$.crate_info.version,
 		$.profile,
 		$.version_control,
@@ -45,6 +49,8 @@ pub struct Args {
 		$.compiler.target_triple,
 		$.compiler.host_triple,
 		$.crate_info.enabled_features),
+	about,
+	long_about = None,
 )]
 pub enum Args {
 	#[clap(name = "file-based")]
