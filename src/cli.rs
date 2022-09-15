@@ -1,6 +1,12 @@
 use anyhow::Result;
 use tracing::{error, info};
 
+#[cfg(not(feature = "camino"))]
+use std::path::PathBuf;
+
+#[cfg(feature = "camino")]
+use camino::Utf8PathBuf as PathBuf;
+
 #[cfg(not(feature = "subcommands"))]
 #[allow(dead_code)] // this is just a sample application
 #[derive(clap::Parser, Debug)]
@@ -21,7 +27,7 @@ use tracing::{error, info};
 pub struct Args {
 	/// Something, something, path
 	#[clap(name = "FILE")]
-	file: std::path::PathBuf,
+	file: PathBuf,
 	/// Optional blubber command
 	#[clap(name = "BLUBBER")]
 	blubber: Option<String>,
@@ -57,7 +63,7 @@ pub enum Args {
 	FileBased {
 		/// Something, something, path
 		#[clap(name = "FILE")]
-		file: std::path::PathBuf,
+		file: PathBuf,
 		/// Optional blubber command
 		#[clap(name = "BLUBBER")]
 		blubber: Option<String>,
