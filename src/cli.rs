@@ -1,11 +1,10 @@
-use anyhow::Result;
-use tracing::{error, info};
-
 #[cfg(not(feature = "camino"))]
 use std::path::PathBuf;
 
+use anyhow::Result;
 #[cfg(feature = "camino")]
 use camino::Utf8PathBuf as PathBuf;
+use tracing::{error, info};
 
 #[cfg(not(feature = "subcommands"))]
 #[allow(dead_code)] // this is just a sample application
