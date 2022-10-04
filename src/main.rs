@@ -7,11 +7,12 @@ use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
 async fn parse_arguments() -> Result<ReturnCode> {
-	use clap::{ErrorKind, Parser};
+	use clap::error::ErrorKind;
+	use clap::Parser;
 
 	match Args::try_parse() {
 		Ok(args) => cli::main(args).await,
-		Err(e) => match e.kind {
+		Err(e) => match e.kind() {
 			ErrorKind::DisplayVersion => {
 				e.print().expect("Could not print version");
 				Ok(ReturnCode::Success)
