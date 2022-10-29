@@ -155,7 +155,7 @@ pub async fn main(args: Args) -> anyhow::Result<ReturnCode> {
 }
 
 #[cfg(feature = "bug")]
-pub async fn main(args: Args) -> Result<ReturnCode> {
+pub async fn main(args: Args) -> anyhow::Result<ReturnCode> {
 	create_logger()?;
 	set_ctrlc_handler()?;
 
