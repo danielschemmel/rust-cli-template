@@ -1,7 +1,6 @@
 #[cfg(not(feature = "camino"))]
 use std::path::PathBuf;
 
-use anyhow::Result;
 #[cfg(feature = "camino")]
 use camino::Utf8PathBuf as PathBuf;
 use tracing::{error, info};
@@ -119,7 +118,7 @@ fn create_logger() -> anyhow::Result<()> {
 
 /// Returns a receiver that is signalled when `SIGINT` is received, e.g., when the user hits Ctrl+C. If the receiver
 /// has been dropped or not serviced quickly enough, the program is terminated automatically upon receiving a signal.
-fn set_ctrlc_handler() -> Result<tokio::sync::mpsc::Receiver<()>> {
+fn set_ctrlc_handler() -> anyhow::Result<tokio::sync::mpsc::Receiver<()>> {
 	let (sender, receiver) = tokio::sync::mpsc::channel(1);
 
 	ctrlc::set_handler(move || match sender.try_send(()) {
@@ -143,7 +142,7 @@ fn set_ctrlc_handler() -> Result<tokio::sync::mpsc::Receiver<()>> {
 }
 
 #[cfg(not(feature = "bug"))]
-pub async fn main(args: Args) -> Result<ReturnCode> {
+pub async fn main(args: Args) -> anyhow::Result<ReturnCode> {
 	create_logger()?;
 	let mut ctrlc = set_ctrlc_handler()?;
 
