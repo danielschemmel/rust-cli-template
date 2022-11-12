@@ -3,16 +3,25 @@
 {
 	"name": "rust",
 
-	"image": "rust",
+  // Use a prebuilt image
+  // "image": "rust",
 
-	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-	//"dockerFile": "../Dockerfile"
+  // Build an image using a dockerfile
+  "build": {
+    // Required when using a Dockerfile. The location of a Dockerfile that defines the contents of the container. The path is relative to the devcontainer.json file.
+    "dockerfile": "Dockerfile",
+		// Sets the run context to one level up instead of the .devcontainer folder.
+		// "context": "..",
+		// A dictionary of build arguments
+    "args": {
+    }
+  },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// Uncomment the next line to run commands after the container is created - for example installing curl.
-	"postCreateCommand": "rustup install stable",
+	// Uncomment the next line to run commands after the container is created - for example ensuring that the current rust toolchain is installed and the cargo registry is initiaalized.
+	"postCreateCommand": "cargo check || true",
 
 	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
 	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
@@ -21,13 +30,13 @@
 	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 
 	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
-	// "remoteUser": "vscode"
+	"remoteUser": "user",
 
 	"customizations": {
     "vscode": {
       "extensions": [
 				"ms-azuretools.vscode-docker",
-				"ms-vsliveshare.vsliveshare-pack",
+				// "ms-vsliveshare.vsliveshare-pack",
 				"rust-lang.rust-analyzer",
 				"serayuzgur.crates",
 				"tamasfe.even-better-toml",
