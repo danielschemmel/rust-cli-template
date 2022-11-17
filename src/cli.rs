@@ -77,7 +77,7 @@ pub enum Args {
 	},
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub enum ReturnCode {
 	Success = 0,
 	CtrlC = -1,
