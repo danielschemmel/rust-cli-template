@@ -85,6 +85,8 @@ pub enum ReturnCode {
 }
 
 fn create_logger() -> anyhow::Result<()> {
+	#[cfg(not(test))]
+	use is_terminal::IsTerminal;
 	use tracing_subscriber::EnvFilter;
 
 	let env_filter = if std::env::var_os(EnvFilter::DEFAULT_ENV).is_some() {
@@ -103,7 +105,7 @@ fn create_logger() -> anyhow::Result<()> {
 
 	#[cfg(not(test))]
 	let subscriber = subscriber
-		.with_ansi(atty::is(atty::Stream::Stdout))
+		.with_ansi(std::io::stdout().is_terminal())
 		.with_writer(std::io::stdout);
 
 	#[cfg(test)]
