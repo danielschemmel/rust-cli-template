@@ -50,7 +50,7 @@ pub struct Args {
 		$.version_control,
 		$.timestamp,
 		$.compiler,
-		$.compiler.target_triple,
+		$.target.triple,
 		$.compiler.host_triple,
 		$.crate_info.enabled_features),
 	about,
