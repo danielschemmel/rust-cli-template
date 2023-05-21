@@ -80,8 +80,8 @@ pub enum Args {
 #[derive(Debug, Copy, Clone)]
 pub enum ReturnCode {
 	Success = 0,
-	CtrlC = -1,
 	ArgumentParsing = 1,
+	CtrlC = 2,
 }
 
 fn create_logger() -> anyhow::Result<()> {

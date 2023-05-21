@@ -6,12 +6,19 @@ mod cli;
 use anyhow::{Context, Result};
 use cli::{Args, ReturnCode};
 
-async fn parse_arguments() -> Result<ReturnCode> {
+impl std::process::Termination for ReturnCode {
+	fn report(self) -> std::process::ExitCode {
+		std::process::ExitCode::from(self as u8)
+	}
+}
+
+#[tokio::main]
+async fn main() -> Result<ReturnCode> {
 	use clap::error::ErrorKind;
 	use clap::Parser;
 
 	match Args::try_parse() {
-		Ok(args) => cli::main(args).await,
+		Ok(args) => cli::main(args).await.context("Uncaught error in main"),
 		Err(e) => match e.kind() {
 			ErrorKind::DisplayVersion => {
 				e.print().expect("Could not print version");
@@ -27,12 +34,4 @@ async fn parse_arguments() -> Result<ReturnCode> {
 			}
 		},
 	}
-}
-
-#[tokio::main]
-async fn main() -> Result<()> {
-	parse_arguments()
-		.await
-		.map(|return_code| std::process::exit(return_code as i32))
-		.context("Uncaught error in main")
 }
