@@ -31,9 +31,9 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
+[build-dependencies]
+build-info-build = "0.0.31"
+
 [dev-dependencies]
 cargo-husky = { version = "1", features = ["run-cargo-test", "run-cargo-check", "run-cargo-clippy", "run-cargo-fmt"] }
 pretty_assertions = "1"
-
-[build-dependencies]
-build-info-build = "0.0.31"
