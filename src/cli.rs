@@ -87,6 +87,7 @@ pub enum ReturnCode {
 fn create_logger() -> anyhow::Result<()> {
 	#[cfg(not(test))]
 	use std::io::IsTerminal;
+
 	use tracing_subscriber::EnvFilter;
 
 	let env_filter = if std::env::var_os(EnvFilter::DEFAULT_ENV).is_some() {
