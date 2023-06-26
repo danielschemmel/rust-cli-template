@@ -25,7 +25,6 @@ build-info = { version = "0.0.31", default_features = false }
 camino = { version = "1", optional = true }
 clap = { version = "4", features = ["derive", "env"] }
 ctrlc = "3"
-is-terminal = "0.4"
 thiserror = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
