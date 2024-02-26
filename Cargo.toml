@@ -21,7 +21,7 @@ subcommands = []
 
 [dependencies]
 anyhow = "1"
-build-info = { version = "0.0.34", default_features = false }
+build-info = { version = "0.0.35", default_features = false }
 camino = { version = "1", optional = true }
 clap = { version = "4", features = ["derive", "env"] }
 ctrlc = "3"
@@ -31,7 +31,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
 [build-dependencies]
-build-info-build = "0.0.34"
+build-info-build = "0.0.35"
 
 [dev-dependencies]
 cargo-husky = { version = "1", features = ["run-cargo-test", "run-cargo-check", "run-cargo-clippy", "run-cargo-fmt"] }
