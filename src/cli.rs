@@ -9,6 +9,8 @@ use tracing::{error, info};
 #[allow(dead_code)] // this is just a sample application
 #[derive(clap::Parser, Debug)]
 #[clap(
+    about,
+	long_about = None,
 	version = build_info::format!(
 		"{} {}\nBuilt from {} at {} with {} for {} on {}. Enabled features: {}.",
 		$.crate_info.version,
@@ -19,8 +21,6 @@ use tracing::{error, info};
 		$.target.triple,
 		$.compiler.host_triple,
 		$.crate_info.enabled_features),
-	about,
-	long_about = None,
 )]
 pub struct Args {
 	/// Something, something, path
@@ -53,28 +53,32 @@ pub struct Args {
 		$.target.triple,
 		$.compiler.host_triple,
 		$.crate_info.enabled_features),
-	about,
-	long_about = None,
 )]
 pub enum Args {
 	#[clap(name = "file-based")]
-	FileBased {
-		/// Something, something, path
-		#[clap(name = "FILE")]
-		file: PathBuf,
-		/// Optional blubber command
-		#[clap(name = "BLUBBER")]
-		blubber: Option<String>,
-	},
+	FileBased(FileBasedArgs),
 	#[clap(name = "network-based")]
-	NetworkBased {
-		/// Port to listen on.
-		#[clap(short = 'p', long = "port", env = "PORT", default_value = "8080")]
-		port: u16,
-		/// Address to listen on.
-		#[clap(short = 'a', long = "address", default_value = "127.0.0.1")]
-		address: String,
-	},
+	NetworkBased(NetworkBasedArgs),
+}
+
+#[derive(clap::Parser, Debug)]
+pub struct FileBasedArgs {
+	/// Something, something, path
+	#[clap(name = "FILE")]
+	file: PathBuf,
+	/// Optional blubber command
+	#[clap(name = "BLUBBER")]
+	blubber: Option<String>,
+}
+
+#[derive(clap::Parser, Debug)]
+pub struct NetworkBasedArgs {
+	/// Port to listen on.
+	#[clap(short = 'p', long = "port", env = "PORT", default_value = "8080")]
+	port: u16,
+	/// Address to listen on.
+	#[clap(short = 'a', long = "address", default_value = "127.0.0.1")]
+	address: String,
 }
 
 #[derive(Debug, Copy, Clone)]
