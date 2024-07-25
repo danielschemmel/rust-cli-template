@@ -61,6 +61,7 @@ pub enum Args {
 	NetworkBased(NetworkBasedArgs),
 }
 
+#[cfg(feature = "subcommands")]
 #[derive(clap::Parser, Debug)]
 pub struct FileBasedArgs {
 	/// Something, something, path
@@ -71,6 +72,7 @@ pub struct FileBasedArgs {
 	blubber: Option<String>,
 }
 
+#[cfg(feature = "subcommands")]
 #[derive(clap::Parser, Debug)]
 pub struct NetworkBasedArgs {
 	/// Port to listen on.
