@@ -6,7 +6,7 @@ authors = ["Daniel Schemmel <daniel@schemmel.net"]
 description = "A sample application"
 
 # Other metadata
-edition = "2021"
+edition = "2024"
 publish = false
 
 [profile.release]

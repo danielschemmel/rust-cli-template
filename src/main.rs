@@ -14,8 +14,8 @@ impl std::process::Termination for ReturnCode {
 
 #[tokio::main]
 async fn main() -> Result<ReturnCode> {
-	use clap::error::ErrorKind;
 	use clap::Parser;
+	use clap::error::ErrorKind;
 
 	match Args::try_parse() {
 		Ok(args) => cli::main(args).await.context("Uncaught error in main"),

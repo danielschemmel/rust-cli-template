@@ -170,7 +170,7 @@ pub async fn main(args: Args) -> anyhow::Result<ReturnCode> {
 
 	info!("{:?}", args);
 
-	use anyhow::{anyhow, Context};
+	use anyhow::{Context, anyhow};
 
 	error!("A bug is about to occur!");
 	let error = anyhow!("The bug feature is enabled");
