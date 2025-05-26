@@ -2,7 +2,7 @@
 # Metadata that is also used to generate the --help command:
 name = "application"
 version = "0.0.0"
-authors = ["Daniel Schemmel <daniel@schemmel.net"]
+authors = ["Daniel Schemmel <daniel@schemmel.net>"]
 description = "A sample application"
 
 # Other metadata
@@ -21,7 +21,7 @@ subcommands = []
 
 [dependencies]
 anyhow = "1"
-build-info = { version = "0.0.39", default-features = false }
+build-info = { version = "0.0.40", default-features = false }
 camino = { version = "1", optional = true }
 clap = { version = "4", features = ["derive", "env"] }
 ctrlc = "3"
@@ -31,7 +31,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
 [build-dependencies]
-build-info-build = "0.0.39"
+build-info-build = "0.0.40"
 
 [dev-dependencies]
 cargo-husky = { version = "1", features = ["run-cargo-test", "run-cargo-check", "run-cargo-clippy", "run-cargo-fmt"] }
