@@ -1,38 +1,39 @@
 [package]
 # Metadata that is also used to generate the --help command:
-name = "application"
-version = "0.0.0"
 authors = ["Daniel Schemmel <daniel@schemmel.net>"]
 description = "A sample application"
+name = "application"
+version = "0.0.0"
 
 # Other metadata
 edition = "2024"
 publish = false
 
 [profile.release]
-lto = "fat"  # options: true/"fat", "thin", false (leaves on *local* LTO), "off"
-codegen-units = 1  # more codegen units means fewer LTO optimization opportunities
+codegen-units = 1 # more codegen units means fewer LTO optimization opportunities
+lto = "fat"       # options: true/"fat", "thin", false (leaves on *local* LTO), "off"
 
 [features]
 default = []
+
 bug = []
 camino = ["dep:camino"]
 subcommands = []
 
 [dependencies]
 anyhow = "1"
-build-info = { version = "0.0.42", default-features = false }
+build-info = { version = "0.0.44", default-features = false }
 camino = { version = "1", optional = true }
 clap = { version = "4", features = ["derive", "env"] }
 ctrlc = "3"
 thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
 [build-dependencies]
-build-info-build = "0.0.42"
+build-info-build = "0.0.44"
 
 [dev-dependencies]
-cargo-husky = { version = "1", features = ["run-cargo-test", "run-cargo-check", "run-cargo-clippy", "run-cargo-fmt"] }
+cargo-husky = { version = "1", features = ["run-cargo-check", "run-cargo-clippy", "run-cargo-fmt", "run-cargo-test"] }
 pretty_assertions = "1"
